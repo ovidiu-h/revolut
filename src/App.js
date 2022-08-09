@@ -1,58 +1,67 @@
 import React from 'react';
-import logo from './logo.svg';
-import { Counter } from './features/counter/Counter';
-import './App.css';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <Counter />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <span>
-          <span>Learn </span>
-          <a
-            className="App-link"
-            href="https://reactjs.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux-toolkit.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux Toolkit
-          </a>
-          ,<span> and </span>
-          <a
-            className="App-link"
-            href="https://react-redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React Redux
-          </a>
-        </span>
-      </header>
-    </div>
-  );
-}
+import { PageWrapper } from './components/Layout/PageWrapper';
+
+import { Auth } from './pages/Auth';
+
+import { Accounts } from './pages/Home/Accounts';
+import { AccountsTransaction } from './pages/Home/Accounts.Transaction';
+import { Cards } from './pages/Home/Cards';
+import { CardsDetails } from './pages/Home/Cards.Details';
+import { Crypto } from './pages/Home/Crypto';
+import { Stocks } from './pages/Home/Stocks';
+
+import { User } from './pages/Home/User';
+
+import { Hub } from './pages/Hub';
+import { NotFound } from './pages/NotFound';
+import { Payment } from './pages/Payment';
+import { Settings } from './pages/Settings';
+import { Topup } from './pages/Topup';
+
+const App = () => {
+    const user = true;
+    return (
+        <div>
+            <BrowserRouter>
+                {user && (
+                    <Routes>
+                        <Route path="/" element={<PageWrapper />}>
+                            <Route index element={<Navigate to="/home" replace />} />
+                            <Route path="start" element={<Navigate to="/home" replace />} />
+
+                            <Route path="home" element={<User />}>
+                                <Route index element={<Navigate to="/home/accounts" replace />} />
+                                <Route path="accounts" element={<Accounts />}>
+                                    <Route path=":id" element={<AccountsTransaction />} />
+                                </Route>
+                                <Route path="cards" element={<Cards />}>
+                                    <Route path=":id" element={<CardsDetails />} />
+                                </Route>
+                                <Route path="stocks" element={<Stocks />} />
+                                <Route path="crypto" element={<Crypto />} />
+                                <Route path="*" element={<NotFound />} />
+                            </Route>
+
+                            <Route path="/topup" element={<Topup />} />
+                            <Route path="/payment" element={<Payment />} />
+                            <Route path="/hub" element={<Hub />} />
+                            <Route path="/settings" element={<Settings />} />
+                            <Route path="*" element={<NotFound />} />
+                        </Route>
+                    </Routes>
+                )}
+
+                {!user && (
+                    <Routes>
+                        <Route path="*" element={<Navigate to="/start" replace />} />
+                        <Route path="/start" element={<Auth />} />
+                    </Routes>
+                )}
+            </BrowserRouter>
+        </div>
+    );
+};
 
 export default App;
