@@ -5,7 +5,6 @@ import { Link } from 'react-router-dom';
 import { MainTitle } from '../components/Texts/MainTitle';
 import { Box } from '../components/Layout/Box';
 
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { SectionTitle } from '../components/Texts/SectionTitle';
 
 const Container = styled.div``;

@@ -19,5 +19,5 @@ export const getDisplayDate = (date) => {
 export const getDisplayAmount = (transaction = {}) => {
     return `${!transaction.ignoreSign ? `${transaction.amount < 0 ? '-' : '+'} ` : ''}${transaction.currency} ${Math.abs(transaction.amount)
         .toFixed(2)
-        .replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ',')}`;
+        .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`;
 };
