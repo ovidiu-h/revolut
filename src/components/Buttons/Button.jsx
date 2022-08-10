@@ -23,7 +23,7 @@ const cssProps = `
     transition: background-color 0.3s ease, color 0.3s ease;
 
     & > svg {
-    font-size: 1.5em;
+        font-size: 1.5em;
     }
 
     &:hover {
@@ -37,7 +37,7 @@ const cssProps = `
 
     &[disabled] {
         pointer-events: none;
-        opacity: .6;
+        opacity: .5;
     }
 `;
 const SampleButton = styled.button`
@@ -50,9 +50,5 @@ const LinkButton = styled(NavLink)`
 
 export const Button = (props = {}) => {
     const Button = props.to ? LinkButton : SampleButton;
-    return (
-        <Button disabled={props.disabled} to={props.to} onClick={props.onClick}>
-            {props.children}
-        </Button>
-    );
+    return <Button {...props}>{props.children}</Button>;
 };

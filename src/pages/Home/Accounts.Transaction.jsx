@@ -1,12 +1,14 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { SidelineModal } from '../../components/Modals/SidelineModal';
 import { MainTitle } from '../../components/Texts/MainTitle';
 import { Box } from '../../components/Layout/Box';
 
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { useSelector } from 'react-redux';
+import { getDisplayAmount, getDisplayDate } from '../../utils';
 
 const TransactionDetails = styled.div`
     margin: 1em 0;
@@ -28,33 +30,35 @@ const Details = styled.div`
 const DetailsLabel = styled.div`
     color: #75808a;
 `;
-const DetailsDescription = styled.div``;
+const DetailsDescription = styled.div`
+    text-transform: lowercase;
+`;
 
 export const AccountsTransaction = () => {
+    const { id } = useParams();
+    const { transactions } = useSelector((state) => state.account);
+    const transaction = transactions.find((t) => t.id === id);
+
     return (
         <SidelineModal>
             <Link to="/home/accounts">
                 <ArrowBackIcon />
             </Link>
             <TransactionDetails>
-                <MainTitle>+ RON 300.00</MainTitle>
+                <MainTitle>{getDisplayAmount(transaction)}</MainTitle>
                 <TransactionInfo>
-                    <TransactionTitle>Cash at Str Nicolae Iorga</TransactionTitle>
-                    <TransactionDescription>Pending - Yesterday, 19:07</TransactionDescription>
+                    <TransactionTitle>{transaction.description}</TransactionTitle>
+                    <TransactionDescription>{getDisplayDate(transaction.createdDate)}</TransactionDescription>
                 </TransactionInfo>
             </TransactionDetails>
             <Box>
                 <Details>
                     <DetailsLabel>Status</DetailsLabel>
-                    <DetailsDescription>Completed</DetailsDescription>
+                    <DetailsDescription>{transaction.state}</DetailsDescription>
                 </Details>
                 <Details>
-                    <DetailsLabel>Status</DetailsLabel>
-                    <DetailsDescription>Completed</DetailsDescription>
-                </Details>
-                <Details>
-                    <DetailsLabel>Status</DetailsLabel>
-                    <DetailsDescription>Completed</DetailsDescription>
+                    <DetailsLabel>Type</DetailsLabel>
+                    <DetailsDescription>{transaction.type}</DetailsDescription>
                 </Details>
             </Box>
         </SidelineModal>

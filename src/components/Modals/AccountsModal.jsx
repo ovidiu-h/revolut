@@ -1,42 +1,16 @@
 import React from 'react';
+import styled from 'styled-components';
+import { useDispatch, useSelector } from 'react-redux';
+import { changePocket } from '../../redux/accountSlice';
+
+import { Box } from '../Layout/Box';
+import { AccountItem } from '../AccountItem';
 
 import Modal from '@mui/material/Modal';
-import { MainTitle } from '../Texts/MainTitle';
 
-import { ItemButton } from '../Buttons/ItemButton';
-import { Box } from '../Layout/Box';
-import styled from 'styled-components';
-import AddIcon from '@mui/icons-material/Add';
-
-const ItemDetails = styled.div`
-    display: flex;
-    align-items: center;
-    gap: 1em;
-`;
-const ItemInfo = styled.div`
-    display: flex;
-    flex-direction: column;
-`;
-const ItemTitle = styled.div`
+const ModalTitle = styled.h2`
     font-weight: 600;
-    margin-bottom: 5px;
-`;
-const ItemDescription = styled.div`
-    font-size: 0.8em;
-    color: #75808a;
-`;
-const TransactionValue = styled.div``;
-
-const ItemAvatar = styled.div`
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    background-color: #0666eb1a;
-    color: #0666eb;
-    font-size: 0.75em;
+    margin-bottom: 1em;
 `;
 
 const ModalBox = styled.div`
@@ -56,62 +30,31 @@ const Hr = styled.hr`
 `;
 
 export const AccountsModal = (props = {}) => {
+    const { pockets, currency } = useSelector((state) => state.account);
+    const currentAccount = pockets.filter((p) => p.currency === currency);
+    const otherAccounts = pockets.filter((p) => p.currency !== currency);
+
+    const dispatch = useDispatch();
+
+    const handleClick = (currency) => {
+        dispatch(changePocket(currency));
+        props.onClose();
+    };
+
     return (
         <Modal open={props.open} onClose={props.onClose}>
             <ModalBox>
-                <MainTitle>Accounts</MainTitle>
+                <ModalTitle>Accounts</ModalTitle>
                 <Box>
-                    <ItemButton>
-                        <ItemDetails>
-                            <ItemAvatar>
-                                <AddIcon />
-                            </ItemAvatar>
-                            <ItemInfo>
-                                <ItemTitle>Test</ItemTitle>
-                                <ItemDescription>Ron</ItemDescription>
-                            </ItemInfo>
-                        </ItemDetails>
-                        <TransactionValue>RON 300.00</TransactionValue>
-                    </ItemButton>
+                    {currentAccount.map((pocket) => (
+                        <AccountItem key={pocket.id} pocket={pocket} onClick={handleClick.bind(this, pocket.currency)} />
+                    ))}
                 </Box>
                 <Hr />
                 <Box>
-                    <ItemButton>
-                        <ItemDetails>
-                            <ItemAvatar>
-                                <AddIcon />
-                            </ItemAvatar>
-                            <ItemInfo>
-                                <ItemTitle>Test</ItemTitle>
-                                <ItemDescription>Ron</ItemDescription>
-                            </ItemInfo>
-                        </ItemDetails>
-                        <TransactionValue>RON 300.00</TransactionValue>
-                    </ItemButton>
-                    <ItemButton>
-                        <ItemDetails>
-                            <ItemAvatar>
-                                <AddIcon />
-                            </ItemAvatar>
-                            <ItemInfo>
-                                <ItemTitle>Test</ItemTitle>
-                                <ItemDescription>Ron</ItemDescription>
-                            </ItemInfo>
-                        </ItemDetails>
-                        <TransactionValue>RON 300.00</TransactionValue>
-                    </ItemButton>
-                    <ItemButton>
-                        <ItemDetails>
-                            <ItemAvatar>
-                                <AddIcon />
-                            </ItemAvatar>
-                            <ItemInfo>
-                                <ItemTitle>Test</ItemTitle>
-                                <ItemDescription>Ron</ItemDescription>
-                            </ItemInfo>
-                        </ItemDetails>
-                        <TransactionValue>RON 300.00</TransactionValue>
-                    </ItemButton>
+                    {otherAccounts.map((pocket) => (
+                        <AccountItem key={pocket.id} pocket={pocket} onClick={handleClick.bind(this, pocket.currency)} />
+                    ))}
                 </Box>
             </ModalBox>
         </Modal>

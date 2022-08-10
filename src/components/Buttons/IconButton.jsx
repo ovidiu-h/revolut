@@ -41,9 +41,5 @@ const LinkButton = styled(NavLink)`
 
 export const IconButton = (props = {}) => {
     const Button = props.to ? LinkButton : SampleButton;
-    return (
-        <Button disabled={props.disabled} to={props.to} onClick={props.onClick}>
-            {props.children}
-        </Button>
-    );
+    return <Button {...props}>{props.children}</Button>;
 };
