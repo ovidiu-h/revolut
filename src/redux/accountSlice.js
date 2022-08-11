@@ -91,7 +91,8 @@ const accountSlice = createSlice({
                     currency: state.currency,
                     ...action.payload,
                 },
-            ].concat(state.transactions);
+                ...state.transactions,
+            ];
             state.isFetching = false;
         },
     },
